@@ -14,7 +14,10 @@ public class MessageTypes {
     public static final String FINAL_TRANSCRIPT = "FINAL_TRANSCRIPT";
     public static final String INTERMEDIATE_TRANSCRIPT = "INTERMEDIATE_TRANSCRIPT";
     public static final String TRANSCRIPT_TEXT = "TRANSCRIPT_TEXT";
-    public static final String TRANSCRIPT_ID = "TRANSCRIPT_ID";
+
+    //NLP info
+    public static final String NER_RESULT = "NER_RESULT";
+    public static final String NER_DATA = "NER_DATA";
 
     //VOICE COMMANDS
     public static final String VOICE_COMMAND_RESPONSE = "VOICE_COMMAND_RESPONSE";
@@ -70,6 +73,8 @@ public class MessageTypes {
     public final static String MODE_TEXT_LIST = "MODE_TEXT_LIST";
     public final static String MODE_TEXT_BLOCK = "MODE_TEXT_BLOCK";
     public final static String MODE_BLANK = "MODE_BLANK";
+    public final static String MODE_IDEAS = "MODE_IDEAS";
+
 
 }
 

@@ -237,6 +237,20 @@ class ASGRepresentative {
         }
     }
 
+    public void sendNerResults(JSONArray results){
+        try{
+            //build json object to send command result
+            JSONObject commandResponseObject = new JSONObject();
+            commandResponseObject.put(MessageTypes.MESSAGE_TYPE_LOCAL, MessageTypes.NER_RESULT);
+            commandResponseObject.put(MessageTypes.NER_DATA, results.toString());
+
+            //send the command result to web socket, to send to asg
+            dataObservable.onNext(commandResponseObject);
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+
     public void startAsgConnection(){
         killme = false;
 

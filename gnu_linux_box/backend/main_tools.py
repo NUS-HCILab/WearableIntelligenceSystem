@@ -26,8 +26,8 @@ class Tools:
 
     def run_ner(self, text):
         #run nlp
-        doc = self.spacey_nlp(text)
-        return doc
+        ents = self.spacey_nlp(text).ents
+        return ents
 
     def search_duckduckgo(self, entity_name):
         #duckduckgosearch for entities
@@ -43,7 +43,7 @@ class Tools:
 
     def semantic_web_speech(self, text):
         #run named entity recognition
-        nes = self.run_ner(text).ents
+        nes = self.run_ner(text)
 
         # for each thing (name entity) search engine (duckduckgo) to find the top result for that thing
         entities_results= list()
@@ -142,8 +142,12 @@ class Tools:
     def get_wolfram_key(self, key_file):
         #Wolfram API key - this loads from a plain text file containing only one string - your APP id key
         wolfram_api_key = None
-        with open(key_file) as f:
-            wolfram_api_key = [line.strip() for line in f][0]
+        try:
+            with open(key_file) as f:
+                wolfram_api_key = [line.strip() for line in f][0]
+        except Exception as e:
+            print("Wolfram API key doesn't exist or is malformed, proceeding without Wolfram")
+            wolfram_api_key = None
         return wolfram_api_key
 
     def natural_language_query(self, query):
@@ -154,6 +158,10 @@ class Tools:
         return self.wolfram_conversational_query(query)
 
     def wolfram_conversational_query(self, query):
+        if (wolfram_api_key is None):
+            print("Can't run Wolfram query because we don't have a Wolfram API key.")
+            return None
+
         #API that returns short conversational responses - can be extended in future to be conversational using returned "conversationID" key
         #encode query
         query_enc = urllib.parse.quote_plus(query)

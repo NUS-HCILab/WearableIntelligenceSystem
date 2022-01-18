@@ -17,6 +17,10 @@ public class MessageTypes {
     public static final String TRANSCRIPT_ID = "TRANSCRIPT_ID";
     public static final String TIMESTAMP = "TIMESTAMP";
 
+    //NLP info
+    public static final String NER_RESULT = "NER_RESULT";
+    public static final String NER_DATA = "NER_DATA";
+
     //VOICE COMMANDS
     public static final String VOICE_COMMAND_RESPONSE = "VOICE_COMMAND_RESPONSE";
     public static final String COMMAND_RESULT = "COMMAND_RESULT";

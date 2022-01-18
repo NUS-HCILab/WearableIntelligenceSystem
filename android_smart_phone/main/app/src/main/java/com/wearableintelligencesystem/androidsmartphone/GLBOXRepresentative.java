@@ -50,11 +50,39 @@ class GLBOXRepresentative {
                 sendSearchEngineQuery(data);
             } else if (type.equals(MessageTypes.VISUAL_SEARCH_QUERY)){
                 sendVisualSearchQuery(data);
+            } else if (type.equals(MessageTypes.FINAL_TRANSCRIPT)){
+                sendNerQuery(data);
             }
-        } catch (JSONException e){
+    } catch (JSONException e){
             e.printStackTrace();
         }
 
+    }
+
+    public void sendNerQuery(JSONObject data){
+        Log.d(TAG, "Running sendNerQuery");
+        try{
+            JSONObject restMessage = new JSONObject();
+            restMessage.put("text", data.getString(MessageTypes.TRANSCRIPT_TEXT));
+            restServerComms.restRequest(RestServerComms.NER_QUERY_SEND_ENDPOINT, restMessage, new VolleyCallback(){
+                @Override
+                public void onSuccess(JSONObject result){
+                    Log.d(TAG, "GOT NER REST RESULT:");
+                    Log.d(TAG, result.toString());
+                    try{
+                        asgRep.sendNerResults(result.getJSONArray("payload"));
+                    } catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }
+                @Override
+                public void onFailure(){
+                }
+
+            });
+        } catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
     public void sendVisualSearchQuery(JSONObject data){

@@ -74,6 +74,7 @@ public class MainActivity extends Activity {
     public long lastFaceUpdateTime = 0;
     public long faceUpdateInterval = 5000; //milliseconds
 
+    public String bulletPointsString;
 
     public final static String ACTION_UI_UPDATE = "com.example.wearableaidisplaymoverio.UI_UPDATE";
     public final static String PHONE_CONN_STATUS_UPDATE = "com.example.wearableaidisplaymoverio.PHONE_CONN_STATUS_UPDATE";
@@ -129,6 +130,9 @@ public class MainActivity extends Activity {
     private String textBlockHolder = "";
     TextView textBlockView;
 
+    //ideas list ui
+    private TextView bulletPointsTextView;
+
     //metrics
     float eye_contact_30 = 0;
     String facial_emotion_30 = "";
@@ -183,6 +187,9 @@ public class MainActivity extends Activity {
 
         //create the WearableAI service if it isn't already running
         startWearableAiService();
+
+        //our default start mode
+        switchMode(MessageTypes.MODE_IDEAS);
     }
 
     private void setupHud(){
@@ -311,6 +318,9 @@ public class MainActivity extends Activity {
             case MessageTypes.MODE_LIVE_LIFE_CAPTIONS:
                 setupLlcUi();
                 break;
+            case MessageTypes.MODE_IDEAS:
+                setupIdeasMode();
+                break;
         }
 
         //registerReceiver(mComputeUpdateReceiver, makeComputeUpdateIntentFilter());
@@ -344,6 +354,44 @@ public class MainActivity extends Activity {
 //        }
 
         updateViewFindFrame();
+    }
+
+    private void updateBulletPoints(JSONArray data){
+        if (curr_mode != MessageTypes.MODE_IDEAS){
+            return;
+        } else if (data.length() == 0){
+            return;
+        }
+        String bulletPoint = "";
+        try {
+            for (int i = 0; i < data.length(); i++) {
+                String name = data.getJSONObject(i).getString("text");
+                if (bulletPoint != "") {
+                    bulletPoint = bulletPoint + ", " + name;
+                } else {
+                    bulletPoint = "- " + name;
+                }
+            }
+        } catch (JSONException e){
+            e.printStackTrace();
+            return;
+        }
+
+        if (bulletPointsString != null) {
+            bulletPointsString = bulletPointsString + "\n" + bulletPoint;
+        } else {
+            bulletPointsString = bulletPoint;
+        }
+
+        if (curr_mode.equals(MessageTypes.MODE_IDEAS)){
+            bulletPointsTextView.setText(bulletPointsString);
+        }
+    }
+
+    private void setupIdeasMode() {
+        //live life captions mode gui setup
+        setContentView(R.layout.bullet_point_list_fullscreen);
+        bulletPointsTextView = findViewById(R.id.bullet_point_list_text_view);
     }
 
     //generic way to set the current enumerated list of strings and display them, scrollably, on the main UI
@@ -567,6 +615,8 @@ public class MainActivity extends Activity {
                         String modeName = data.getString(MessageTypes.NEW_MODE);
                         //switch to that mode
                         switchMode(modeName);
+                    } else if (typeOf.equals(MessageTypes.NER_RESULT)){
+                        updateBulletPoints(new JSONArray(data.getString(MessageTypes.NER_DATA)));
                     }
             } catch(JSONException e){
                     e.printStackTrace();
