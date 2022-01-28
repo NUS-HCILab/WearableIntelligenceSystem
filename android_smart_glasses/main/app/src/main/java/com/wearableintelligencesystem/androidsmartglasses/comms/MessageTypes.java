@@ -18,6 +18,8 @@ public class MessageTypes {
     //NLP info
     public static final String NER_RESULT = "NER_RESULT";
     public static final String NER_DATA = "NER_DATA";
+    public static final String KEYWORD_RESULT = "KEYWORD_RESULT";
+    public static final String KEYWORD_DATA = "KEYWORD_DATA";
 
     //VOICE COMMANDS
     public static final String VOICE_COMMAND_RESPONSE = "VOICE_COMMAND_RESPONSE";

@@ -181,7 +181,7 @@ public class WearableAiService extends HiddenCameraService {
 
         mContext = this;
 
-        beginCamera();
+        //beginCamera();
 
         //start sensor scan
 //        mBluetoothScanner = new BluetoothScanner(this);

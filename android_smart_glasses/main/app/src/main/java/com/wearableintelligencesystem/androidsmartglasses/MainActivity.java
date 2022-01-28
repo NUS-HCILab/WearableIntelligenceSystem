@@ -386,12 +386,17 @@ public class MainActivity extends Activity {
         if (curr_mode.equals(MessageTypes.MODE_IDEAS)){
             bulletPointsTextView.setText(bulletPointsString);
         }
+        Log.d(TAG, "SCROLL BP to button");
+        scrollToBottom(bulletPointsTextView);
     }
 
     private void setupIdeasMode() {
         //live life captions mode gui setup
         setContentView(R.layout.bullet_point_list_fullscreen);
         bulletPointsTextView = findViewById(R.id.bullet_point_list_text_view);
+
+        bulletPointsTextView.setMovementMethod(new ScrollingMovementMethod());
+        bulletPointsTextView.setSelected(true);
     }
 
     //generic way to set the current enumerated list of strings and display them, scrollably, on the main UI
@@ -615,8 +620,8 @@ public class MainActivity extends Activity {
                         String modeName = data.getString(MessageTypes.NEW_MODE);
                         //switch to that mode
                         switchMode(modeName);
-                    } else if (typeOf.equals(MessageTypes.NER_RESULT)){
-                        updateBulletPoints(new JSONArray(data.getString(MessageTypes.NER_DATA)));
+                    } else if (typeOf.equals(MessageTypes.KEYWORD_RESULT)){
+                        updateBulletPoints(new JSONArray(data.getString(MessageTypes.KEYWORD_DATA)));
                     }
             } catch(JSONException e){
                     e.printStackTrace();
@@ -970,10 +975,13 @@ public class MainActivity extends Activity {
                     currentlyScrolling = true;
                     int lc = tv.getLineCount();
                     if (lc == 0) {
+                        Log.d(TAG, "LINE COUNT IS 0");
+                        currentlyScrolling = false;
                         return;
                     }
                     tv.scrollTo(0, tv.getBottom());
                     int scrollAmount = tv.getLayout().getLineTop(lc) - tv.getHeight();
+                    Log.d(TAG, "SCROLL AMOUNT: " + scrollAmount);
                     // if there is no need to scroll, scrollAmount will be <=0
                     if (scrollAmount > 0)
                         tv.scrollTo(0, scrollAmount);

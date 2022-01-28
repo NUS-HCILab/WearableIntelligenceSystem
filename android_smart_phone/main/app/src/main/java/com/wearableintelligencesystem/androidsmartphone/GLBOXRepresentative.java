@@ -64,10 +64,10 @@ class GLBOXRepresentative {
         try{
             JSONObject restMessage = new JSONObject();
             restMessage.put("text", data.getString(MessageTypes.TRANSCRIPT_TEXT));
-            restServerComms.restRequest(RestServerComms.NER_QUERY_SEND_ENDPOINT, restMessage, new VolleyCallback(){
+            restServerComms.restRequest(RestServerComms.KEYWORD_EXTRACTION_QUERY_SEND_ENDPOINT, restMessage, new VolleyCallback(){
                 @Override
                 public void onSuccess(JSONObject result){
-                    Log.d(TAG, "GOT NER REST RESULT:");
+                    Log.d(TAG, "GOT Keyword REST RESULT:");
                     Log.d(TAG, result.toString());
                     try{
                         asgRep.sendNerResults(result.getJSONArray("payload"));

@@ -7,6 +7,7 @@ import requests
 import json
 import urllib
 import base64
+from rake_nltk import Rake
 
 #function structured into their classes and/or modules
 from utils.bing_visual_search import bing_visual_search
@@ -16,6 +17,7 @@ class Tools:
     def __init__(self):
         #import nlp
         self.spacey_nlp = spacy.load("en_core_web_sm") # if not found, download with python -m spacy download en_core_web_sm
+        self.rake = Rake()
         self.og_limit = 3 #only open up this many pages to check for open graph, or it will take too long
         self.summary_limit = 35 #word limit on summary
         self.check_wiki_limit = 5 #don't use wiki unless it's in the top n results
@@ -28,6 +30,15 @@ class Tools:
         #run nlp
         ents = self.spacey_nlp(text).ents
         return ents
+
+    def run_rake(self, text):
+        #run RAKE - keyword extraction
+        self.rake.extract_keywords_from_text(text)
+        ranked_keywords = self.rake.get_ranked_phrases()
+        ranked_keywords_with_scores = self.rake.get_ranked_phrases_with_scores()
+        print(ranked_keywords)
+        print(ranked_keywords_with_scores)
+        return ranked_keywords
 
     def search_duckduckgo(self, entity_name):
         #duckduckgosearch for entities
