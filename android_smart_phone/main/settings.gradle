@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Wearable Intelligence System ASP"
 include ':app'
+

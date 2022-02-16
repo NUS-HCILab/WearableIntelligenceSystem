@@ -74,4 +74,11 @@ public class NlpUtils {
         return myself;
     }
 
+    public static int wordsInString(String s){
+        String trim = s.trim();
+        if (trim.isEmpty())
+            return 0;
+        return trim.split("\\s+").length; // separate string around spaces
+    }
+
 }

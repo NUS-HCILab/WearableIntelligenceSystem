@@ -34,11 +34,8 @@ class Tools:
     def run_rake(self, text):
         #run RAKE - keyword extraction
         self.rake.extract_keywords_from_text(text)
-        ranked_keywords = self.rake.get_ranked_phrases()
         ranked_keywords_with_scores = self.rake.get_ranked_phrases_with_scores()
-        print(ranked_keywords)
-        print(ranked_keywords_with_scores)
-        return ranked_keywords
+        return ranked_keywords_with_scores
 
     def search_duckduckgo(self, entity_name):
         #duckduckgosearch for entities

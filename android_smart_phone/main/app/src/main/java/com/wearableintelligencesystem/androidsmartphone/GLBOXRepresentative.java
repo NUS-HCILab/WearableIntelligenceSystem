@@ -50,7 +50,7 @@ class GLBOXRepresentative {
                 sendSearchEngineQuery(data);
             } else if (type.equals(MessageTypes.VISUAL_SEARCH_QUERY)){
                 sendVisualSearchQuery(data);
-            } else if (type.equals(MessageTypes.FINAL_TRANSCRIPT)){
+            } else if (type.equals(MessageTypes.KEYWORD_QUERY)){
                 sendNerQuery(data);
             }
     } catch (JSONException e){
@@ -63,7 +63,7 @@ class GLBOXRepresentative {
         Log.d(TAG, "Running sendNerQuery");
         try{
             JSONObject restMessage = new JSONObject();
-            restMessage.put("text", data.getString(MessageTypes.TRANSCRIPT_TEXT));
+            restMessage.put("text", data.getString(MessageTypes.TEXT_TO_PROCESS));
             restServerComms.restRequest(RestServerComms.KEYWORD_EXTRACTION_QUERY_SEND_ENDPOINT, restMessage, new VolleyCallback(){
                 @Override
                 public void onSuccess(JSONObject result){

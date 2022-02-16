@@ -41,13 +41,15 @@ class KeywordExtractionApi(Resource):
         payload = list()
         for kw in keywords[:3]:
             plain_ent = dict()
-            plain_ent["text"] = kw
+            plain_ent["text"] = kw[1]
+            plain_ent["value"] = kw[0] if (kw[0] > 4) else 4
             payload.append(plain_ent)
 
         #build payload
         if keywords is not None:
             resp = dict()
             resp["success"] = True
+            print(payload)
             resp["payload"] = payload 
         else:
             return self.send_fail()

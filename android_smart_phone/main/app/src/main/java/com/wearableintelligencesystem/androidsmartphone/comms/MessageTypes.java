@@ -76,6 +76,9 @@ public class MessageTypes {
     public final static String MODE_TEXT_BLOCK = "MODE_TEXT_BLOCK";
     public final static String MODE_BLANK = "MODE_BLANK";
 
+    //UbiIdeas idea generation
+    public final static String KEYWORD_QUERY = "KEYWORD_QUERY";
+    public final static String TEXT_TO_PROCESS = "TEXT_TO_PROCESS";
 }
 
 

@@ -182,6 +182,8 @@ public class WearableAiAspService extends LifecycleService {
             faceRecApi.setup();
         }
     }, 10);
+
+    UbiIdeasSystem ubi = new UbiIdeasSystem(this, dataObservable);
   }
 
 

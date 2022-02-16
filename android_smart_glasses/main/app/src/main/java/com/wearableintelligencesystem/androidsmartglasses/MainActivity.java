@@ -42,7 +42,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.widget.Toast;
 
@@ -61,6 +63,7 @@ import com.wearableintelligencesystem.androidsmartglasses.comms.MessageTypes;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import com.mordred.wordcloud.WordCloud;
 
 
 public class MainActivity extends Activity {
@@ -132,6 +135,8 @@ public class MainActivity extends Activity {
 
     //ideas list ui
     private TextView bulletPointsTextView;
+    Map<String, Integer> wordMap;
+    ImageView wordCloudImage;
 
     //metrics
     float eye_contact_30 = 0;
@@ -356,6 +361,34 @@ public class MainActivity extends Activity {
         updateViewFindFrame();
     }
 
+    private void updateWordCloud(JSONArray data) {
+        if (curr_mode != MessageTypes.MODE_IDEAS){
+            return;
+        } else if (data.length() == 0){
+            return;
+        }
+        wordMap = new HashMap<>();
+
+        try {
+            for (int i = 0; i < data.length(); i++) {
+                String keyword = data.getJSONObject(i).getString("text");
+                Integer value = (Integer) data.getJSONObject(i).getInt("value");
+                if (keyword != "") {
+                    wordMap.put(keyword,value);
+                }
+            }
+        } catch (JSONException e){
+            e.printStackTrace();
+            return;
+        }
+
+        WordCloud wd = new WordCloud(wordMap, 400, 480,Color.WHITE,Color.BLACK);
+        wd.setWordColorOpacityAuto(true);
+
+        Bitmap generatedWordCloudBmp = wd.generate();
+        wordCloudImage.setImageBitmap(generatedWordCloudBmp);
+    }
+
     private void updateBulletPoints(JSONArray data){
         if (curr_mode != MessageTypes.MODE_IDEAS){
             return;
@@ -397,6 +430,25 @@ public class MainActivity extends Activity {
 
         bulletPointsTextView.setMovementMethod(new ScrollingMovementMethod());
         bulletPointsTextView.setSelected(true);
+
+//        //word cloud setup
+//        setContentView(R.layout.word_cloud_full_screen_layout);
+//        wordCloudImage = findViewById(R.id.word_cloud_image_view);
+//        wordMap = new HashMap<>();
+//
+//        wordMap.put("oguzhan", 2); // "oguzhan" -> word, "2" -> word count
+//        wordMap.put("mordred", 2);
+//        wordMap.put("is", 4);
+//        wordMap.put("on",2);
+//        wordMap.put("the", 3);
+//        wordMap.put("salda lake",5);
+//        wordMap.put("elon musk",15);
+//
+//        WordCloud wd = new WordCloud(wordMap, 480, 480,Color.WHITE,Color.BLACK);
+//        wd.setWordColorOpacityAuto(true);
+//
+//        Bitmap generatedWordCloudBmp = wd.generate();
+//        wordCloudImage.setImageBitmap(generatedWordCloudBmp);
     }
 
     //generic way to set the current enumerated list of strings and display them, scrollably, on the main UI
@@ -622,6 +674,7 @@ public class MainActivity extends Activity {
                         switchMode(modeName);
                     } else if (typeOf.equals(MessageTypes.KEYWORD_RESULT)){
                         updateBulletPoints(new JSONArray(data.getString(MessageTypes.KEYWORD_DATA)));
+//                        updateWordCloud(new JSONArray(data.getString(MessageTypes.KEYWORD_DATA)));
                     }
             } catch(JSONException e){
                     e.printStackTrace();
